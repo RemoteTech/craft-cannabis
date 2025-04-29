@@ -37,7 +37,7 @@ export default function RootLayout({ children }: RootLayoutProps) {
            <Link href="/about">About</Link> |{" "}
            <Link href="/contact">Contact</Link>
          </nav>
-        {children}
+         {children}
       </body>
     </html>
   );
