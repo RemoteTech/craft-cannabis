@@ -30,12 +30,12 @@ export default function RootLayout({ children }: RootLayoutProps) {
       <head>
         <meta name="google-adsense-account" content="ca-pub-6011504846169529"></meta>
         </head>
-        <body>
-        <Navbar />
-        <main style={{ padding: '2rem', maxWidth: '1000px', margin: 'auto' }}>
-          {children}
-        </main>
-      </body>
+          <body>
+          <Navbar />
+            <main style={{ padding: '2rem', maxWidth: '1000px', margin: 'auto' }}>
+              {children}
+            </main>
+          </body>
     </html>
   );
 }
