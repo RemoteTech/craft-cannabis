@@ -2,10 +2,10 @@
 
 import { ReactNode } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { usePathname } from 'next/navigation';
 
 interface RootLayoutProps {
   children: ReactNode;
