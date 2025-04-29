@@ -1,11 +1,9 @@
-"use client";
 
 import { ReactNode } from 'react';
-import Link from 'next/link';
+import Navbar from '../components/Navbar';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import { usePathname } from 'next/navigation';
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -27,19 +25,16 @@ export const metadata: Metadata = {
 };
 
 export default function RootLayout({ children }: RootLayoutProps) {
-  const pathname = usePathname();
   return (
     <html lang="en">
       <head>
         <meta name="google-adsense-account" content="ca-pub-6011504846169529"></meta>
         </head>
         <body>
-         <nav style={{ padding: '1rem', background: '#f0f0f0' }}>
-            <Link href="/">Home</Link> |{" "}
-           <Link href="/about">About</Link> |{" "}
-           <Link href="/contact">Contact</Link>
-         </nav>
-         {children}
+        <Navbar />
+        <main style={{ padding: '2rem', maxWidth: '1000px', margin: 'auto' }}>
+          {children}
+        </main>
       </body>
     </html>
   );
