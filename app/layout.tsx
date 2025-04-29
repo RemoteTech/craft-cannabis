@@ -1,9 +1,9 @@
+import { ReactNode } from 'react';
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Link from 'next/link';
-import { ReactNode } from 'react';
-import { usePathname } from 'next/navigation';
 
 interface RootLayoutProps {
   children: ReactNode;
@@ -29,14 +29,14 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="en">
       <head>
-      <meta name="google-adsense-account" content="ca-pub-6011504846169529"></meta>
-      </head>
-      <body>
-        <nav style={{ padding: '1rem', background: '#f0f0f0' }}>
-          <Link href="/">Home</Link> |{" "}
-          <Link href="/about">About</Link> |{" "}
-          <Link href="/contact">Contact</Link>
-        </nav>
+        <meta name="google-adsense-account" content="ca-pub-6011504846169529"></meta>
+        </head>
+        <body>
+         <nav style={{ padding: '1rem', background: '#f0f0f0' }}>
+            <Link href="/">Home</Link> |{" "}
+           <Link href="/about">About</Link> |{" "}
+           <Link href="/contact">Contact</Link>
+         </nav>
         {children}
       </body>
     </html>
