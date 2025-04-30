@@ -1,34 +1,31 @@
-// app/page.tsx
+import Link from "next/link";
+import { type SanityDocument } from "next-sanity";
 
-import { sanityClient } from '../lib/sanity';
+import { client } from "@/sanity/client";
 
-type Post = {
-  _id: string;
-  title: string;
-  slug: { current: string };
-  excerpt?: string;
-};
+const POSTS_QUERY = `*[
+  _type == "post"
+  && defined(slug.current)
+]|order(publishedAt desc)[0...12]{_id, title, slug, publishedAt}`;
 
-export default async function HomePage() {
-  const query = `*[_type == "post"] | order(_createdAt desc)[0...6] {
-    _id,
-    title,
-    slug,
-    excerpt
-  }`;
+const options = { next: { revalidate: 30 } };
 
-  const posts: Post[] = await sanityClient.fetch(query, {}, { next: { revalidate: 60 } })
+export default async function IndexPage() {
+  const posts = await client.fetch<SanityDocument[]>(POSTS_QUERY, {}, options);
 
   return (
-    <main className="p-6 max-w-5xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6">Latest Articles</h1>
-      {posts.map((post) => (
-        <article key={post._id} className="mb-6 p-4 border rounded bg-white shadow-sm">
-          <h2 className="text-xl font-semibold">{post.title}</h2>
-          <p className="text-sm text-gray-600">{post.excerpt || 'No summary available'}</p>
-          <a href={`/blog/${post.slug.current}`} className="text-green-600 text-sm mt-2 inline-block">Read more →</a>
-        </article>
-      ))}
+    <main className="container mx-auto min-h-screen max-w-3xl p-8">
+      <h1 className="text-4xl font-bold mb-8">Posts</h1>
+      <ul className="flex flex-col gap-y-4">
+        {posts.map((post) => (
+          <li className="hover:underline" key={post._id}>
+            <Link href={`/${post.slug.current}`}>
+              <h2 className="text-xl font-semibold">{post.title}</h2>
+              <p>{new Date(post.publishedAt).toLocaleDateString()}</p>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </main>
   );
 }
