@@ -1,52 +1,34 @@
-import Image from "next/image";
+// app/page.tsx
 
-export default function HomePage() {
-  const posts = [
-    {
-      title: "Craft Cannabis and Sustainability",
-      excerpt: "How local growers are changing the game with regenerative techniques.",
-      category: "Environment",
-      timeAgo: "4 hours ago",
-      views: 320,
-      image: "/images/cannabis1.png", // add real images later
-    },
-    {
-      title: "5 Myths About Craft Cannabis Debunked",
-      excerpt: "A breakdown of the most common misunderstandings.",
-      category: "Health",
-      timeAgo: "7 hours ago",
-      views: 150,
-      image: "/images/cannabis2.png",
-    },
-    {
-      title: "Inside a Brooklyn Grow Lab",
-      excerpt: "How one small team is building high-quality, low-footprint buds.",
-      category: "Culture",
-      timeAgo: "10 hours ago",
-      views: 240,
-      image: "/images/cannabis3.jpg",
-    },
-  ];
+import { sanityClient } from '../lib/sanity';
+
+type Post = {
+  _id: string;
+  title: string;
+  slug: { current: string };
+  excerpt?: string;
+};
+
+export default async function HomePage() {
+  const query = `*[_type == "post"] | order(_createdAt desc)[0...6] {
+    _id,
+    title,
+    slug,
+    excerpt
+  }`;
+
+  const posts: Post[] = await sanityClient.fetch(query, {}, { next: { revalidate: 60 } })
 
   return (
-    <main className="p-6 max-w-7xl mx-auto">
-      <h1 className="text-3xl font-bold mb-6 text-gray-900">Featured Articles</h1>
-      <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post, index) => (
-          <div key={index} className="rounded-lg shadow hover:shadow-lg transition overflow-hidden bg-white">
-            <img src={post.image} alt="" className="w-full h-48 object-cover" />
-            <div className="p-4">
-              <span className="text-sm text-green-600 font-semibold">{post.category}</span>
-              <h2 className="text-lg font-bold mt-1">{post.title}</h2>
-              <p className="text-sm text-gray-600 mt-1">{post.excerpt}</p>
-              <div className="text-xs text-gray-400 mt-3 flex justify-between">
-                <span>{post.timeAgo}</span>
-                <span>👁 {post.views}</span>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
+    <main className="p-6 max-w-5xl mx-auto">
+      <h1 className="text-3xl font-bold mb-6">Latest Articles</h1>
+      {posts.map((post) => (
+        <article key={post._id} className="mb-6 p-4 border rounded bg-white shadow-sm">
+          <h2 className="text-xl font-semibold">{post.title}</h2>
+          <p className="text-sm text-gray-600">{post.excerpt || 'No summary available'}</p>
+          <a href={`/blog/${post.slug.current}`} className="text-green-600 text-sm mt-2 inline-block">Read more →</a>
+        </article>
+      ))}
     </main>
   );
 }
